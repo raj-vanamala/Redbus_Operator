@@ -1,24 +1,33 @@
-.signInBar {
-    margin-top: 20px;
-    padding-top: 10px;
-    padding-bottom: 5px;
-    background-color: #d84e55;
-    border-radius: 5px;
-}
-
-.signInBarLabel {
+.headingCSS {
     color: white;
     font-family: 'Times New Roman', Times, serif;
     font-weight: bolder;
 }
 
-.signInButton {
-    margin-top : 32px;
-    background-color: ghostwhite;
-    color: crimson;
+.LabelCSS {
+    color: white;
     font-family: 'Times New Roman', Times, serif;
-    border-radius: 5px;
+    font-weight: bolder;
 }
+
+.ButtonCSS1 {
+    margin-top: 35px;
+    border-radius: 5px;
+    background-color: darkred;
+    color: white;
+    border: none;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.ButtonCSS2 {
+    margin-top: -10px;
+    border-radius: 5px;
+    background-color: darkred;
+    color: white;
+    border: none;
+    font-family: 'Times New Roman', Times, serif;
+}
+
 
 *:focus {
     outline : none
@@ -40,4 +49,8 @@
     color: white;
     border: none;
     font-family: 'Times New Roman', Times, serif;
+}
+
+.dropdownCSS {
+    height: 32px;
 }

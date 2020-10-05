@@ -1,0 +1,10 @@
+.navigationBar {
+    margin-top:20px;
+    background-color : #d84e55;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    height: 50px;
+    padding: 10px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: large;
+}

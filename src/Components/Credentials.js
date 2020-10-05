@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik,Form,Field,ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import TextError from './TextError'
 import { Col, Container, Row } from 'react-bootstrap'
-
 import '../Styles/Credentials.css'
+import Home from './Home'
 
 const signUpInitialValues = {
     name  : "",
@@ -22,8 +22,6 @@ const signUpValidationSchema =  Yup.object({
     password : Yup.string().required('Required')
 })
 
-const handleSignUp = values => console.log(values);
-
 const signInInitialValues = {
     signInEmail : "",
     signInPassword : ""
@@ -34,12 +32,65 @@ const signInValidationSchema =  Yup.object({
     signInPassword : Yup.string().required('Required')
 })
 
-const handleSignIn = values => console.log(values);
+function Credentials() {
 
-export default function Credentials() {
+    const [signIn , setSignInValue] = useState(false);
+
+
+    function handleSignUp(credentials) {
+
+        fetch("http://localhost:3001/operatorCredentials/signUp/",{
+
+            "method": "POST",
+            "headers" : {
+                "Content-Type" : "application/json"
+            },
+            "body" : JSON.stringify(credentials)
+        })
+
+        .then((response)=>response.json())
+
+        .then((data)=>{
+
+            alert(data.message);
+            if(data.status === "success") {
+                setSignInValue(true)
+            }
+        })
+    }
+
+    
+    function handleSignIn(credentials) {
+
+        fetch("http://localhost:3001/operatorCredentials/signIn/",{
+
+            "method": "POST",
+            "headers" : {
+                "Content-Type" : "application/json"
+            },
+            "body" : JSON.stringify({
+                "email" : credentials.signInEmail,
+                "password" : credentials.signInPassword
+            })
+        })
+
+        .then((response)=>response.json())
+
+        .then((data)=>{
+            alert(data.message);
+            if(data.status === "success") {
+                setSignInValue(true)
+            }
+        })
+
+        
+    }
 
     return (
-        <Container>
+        (signIn === false)
+        ?
+        <>
+            <Container>
          <Row className="signInBar">
              <Col>
                 <Formik
@@ -65,7 +116,6 @@ export default function Credentials() {
                             </Col>
                         </Row>
                     </Form>
-                
                 </Formik>
              </Col>
          </Row>
@@ -122,5 +172,10 @@ export default function Credentials() {
             </Col>
         </Row>
         </Container>
+        </>
+        : 
+        <Home />
        )
 }
+
+export default Credentials;
