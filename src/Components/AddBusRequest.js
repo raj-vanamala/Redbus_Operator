@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Container, Row,Col,Form } from 'react-bootstrap'
-
 import '../Styles/AddBusRequest.css'
 
 const timings = [
@@ -10,7 +9,7 @@ const timings = [
     "21:00 Hrs","22:00 Hrs","23:00 Hrs",
 ]
 
-export default function AddBusRequest() {
+function AddBusRequest() {
 
     const [travelsName , setTravelsName] = useState("")
     const [busType , setBusType] = useState("AC")
@@ -21,14 +20,15 @@ export default function AddBusRequest() {
     const [source , setSource] = useState("")
     const [destination , setDestination] = useState("")
 
-
-
     const [boardingPoints , setBoardingPoints] = useState("")
     const [droppingPoints , setDroppingPoints] = useState("")
     const [boardingPointsKeys , setBoardingPointsKeys] = useState([])
     const [droppingPointsKeys , setDroppingPointsKeys] = useState([])
 
-
+    let boardingPointList = new Map();
+    let boardingPointTimingsList = new Map();
+    let droppingPointList = new Map();
+    let droppingPointTimingsList = new Map();
 
     function handleStateChange(event) {
         let target = event.target;
@@ -69,6 +69,41 @@ export default function AddBusRequest() {
             setDestination(target.value)
     }
 
+    function boardingPointListStateChange(event) {
+            let target = event.target;
+            console.log(target.value);
+            let key = target.name;
+            
+            boardingPointList.set(`${key}`,target.value)
+    }
+
+    function boardingPointTimingsStateChange(event) {
+        let target = event.target;
+        console.log(target.value);
+        let key = target.name;
+        
+        boardingPointTimingsList.set(`${key}`,target.value)
+        console.log(boardingPointTimingsList);
+    }
+
+    function droppingPointListStateChange(event) {
+        let target = event.target;
+        console.log(target.value);
+        let key = target.name;
+        
+        droppingPointList.set(`${key}`,target.value)
+        console.log(droppingPointList);
+    }
+
+    function droppingPointTimingsStateChange(event) {
+            let target = event.target;
+            console.log(target.value);
+            let key = target.name;
+            
+            droppingPointTimingsList.set(`${key}`,target.value)
+            console.log(droppingPointTimingsList);
+    }
+
     function addBoardingPointsKeys() {
 
         let index=1;
@@ -85,6 +120,8 @@ export default function AddBusRequest() {
     function resetBoardingPoints() {
         setBoardingPoints("")
         setBoardingPointsKeys([])
+        boardingPointList.clear();
+        boardingPointTimingsList.clear();
     }
 
     function addDroppingPointsKeys() {
@@ -102,6 +139,8 @@ export default function AddBusRequest() {
     function resetDroppingPoints() {
         setDroppingPoints("")
         setDroppingPointsKeys([])
+        droppingPointList.clear();
+        droppingPointTimingsList.clear();
     }
 
     function handleSubmit(event) {
@@ -114,34 +153,33 @@ export default function AddBusRequest() {
         <Container style = {{backgroundColor : " #d84e55",borderRadius:"5px"}}>
             <div style = {{padding:"20px"}}>
                 <h1 className = "headingCSS">Travel Bus Request</h1>
-                <form onSubmit={handleSubmit}>
+                <Form >
                     <Row>
                         <Col lg = {12} style={{border: "2px solid white"}}></Col>
                         <Col lg = {4}>
-                            <Form.Group controlId="formBasicTravelName">
+                        <Form.Group controlId="formBasicTravelsName">
                                 <Form.Label className = "LabelCSS">Travel's Name</Form.Label>
-                                <Form.Control type="text" placeholder="Enter Travel's Name" name="travelsName" value={travelsName} onChange={handleStateChange} />
-                            </Form.Group>
+                                <Form.Control type="text" name="travelsName" id="travelsName"/>
+                        </Form.Group>
                         </Col>
                         <Col lg = {4}>
-                            <Form.Group controlId="formBasicBusType">
-                                <Form.Label className = "LabelCSS" >Bus Type</Form.Label>
-                                <Form.Control as="select" className="dropdownCSS" onChange={handleStateChange} name="busType">
-                                <option value="AC" defaultValue>AC</option>
-                                <option value="NON AC">NON AC</option>
+                            
+                                <Form.Label className = "LabelCSS" >Bus Type</Form.Label> <br />
+                                <Form.Control as="select" className="dropdownCSS" name="busType" id="busType" onChange={handleStateChange}>
+                                    <option value="AC" defaultValue>AC</option>
+                                    <option value="NON AC">NON AC</option>
                                 </Form.Control>
-                            </Form.Group>
                         </Col>
                         <Col lg = {4}>
                         <Form.Group controlId="formBasicBusNumber">
                                 <Form.Label className = "LabelCSS">Bus Number</Form.Label>
                                 <Form.Control type="text" placeholder="Enter Travel's Bus Number" name="busNumber" value={busNumber} onChange={handleStateChange} />
-                            </Form.Group>
+                        </Form.Group>
                         </Col>
                         <Col lg = {4}>
                         <Form.Group controlId="formBasicDepartureLocation">
                                 <Form.Label className = "LabelCSS">Departure Location</Form.Label>
-                                <Form.Control type="text"  name="departureLocation" onChange={handleStateChange} placeholder="Departure Location">
+                                <Form.Control type="text"  name="departureLocation" onChange={handleStateChange} placeholder="Departure Location" value={source}>
                                 </Form.Control>
                             </Form.Group>
                         </Col>
@@ -158,7 +196,7 @@ export default function AddBusRequest() {
                         <Col lg = {4}>
                         <Form.Group controlId="formBasicArrivalLocation">
                                 <Form.Label className = "LabelCSS">Departure Location</Form.Label>
-                                <Form.Control type="text"  name="arrivalLocation" onChange={handleStateChange} placeholder="Arrival Location">
+                                <Form.Control type="text"  name="arrivalLocation" onChange={handleStateChange} placeholder="Arrival Location" value={destination}>
                                 </Form.Control>
                             </Form.Group>
                         </Col>
@@ -217,13 +255,15 @@ export default function AddBusRequest() {
                                                 <Col lg={7}>
                                                     <Form.Group controlId="formBasicBoardingPointName">
                                                     <Form.Label className = "LabelCSS">Boarding Location</Form.Label>
-                                                    <Form.Control type="text" placeholder="Enter Boarding Location" style={{width:"300px",marginRight:"70px"}}/>
+                                                    <Form.Control type="text" placeholder="Enter Boarding Location"  style={{width:"300px",marginRight:"70px"}} onChange={boardingPointListStateChange} value={boardingPointList.get(`${boardingPoint}`)} />
                                                     </Form.Group>
                                                 </Col>
                                                 <Col lg={5}>
                                                     <Form.Group controlId="formBasicBoardingTime">
                                                         <Form.Label className = "LabelCSS">Time</Form.Label>
-                                                        <Form.Control as="select" className = "dropdownCSS">
+                                                        <Form.Control as="select" className = "dropdownCSS" name={boardingPoint} onChange={boardingPointTimingsStateChange}>
+                                                            
+                                                            <option value="Please Select Time">Please Select Time</option>
                                                             {
                                                                 timings.map(time => <option value={time}>{time}</option>)
                                                             }
@@ -260,13 +300,15 @@ export default function AddBusRequest() {
                                                 <Col lg={7}>
                                                     <Form.Group controlId="formBasicDroppingPointName">
                                                     <Form.Label className = "LabelCSS">Dropping Location</Form.Label>
-                                                    <Form.Control type="text" placeholder="Enter Dropping Location" style={{width:"300px",marginRight:"70px"}}/>
+                                                    <Form.Control type="text" placeholder="Enter Dropping Location" style={{width:"300px",marginRight:"70px"}} onChange={droppingPointListStateChange} value={droppingPointList.get(`${droppingPoint}`)}/>
                                                     </Form.Group>
                                                 </Col>
                                                 <Col lg={5}>
                                                     <Form.Group controlId="formBasicBoardingTime">
                                                         <Form.Label className = "LabelCSS">Time</Form.Label>
-                                                        <Form.Control as="select" className = "dropdownCSS">
+                                                        <Form.Control as="select" className = "dropdownCSS" name={droppingPoint} onChange={droppingPointTimingsStateChange}>
+                                                            
+                                                            <option value="Please Select Time">Please Select Time</option>
                                                             {
                                                                 timings.map(time => <option value={time}>{time}</option>)
                                                             }
@@ -284,8 +326,10 @@ export default function AddBusRequest() {
                             <button type="submit" className ="ButtonCSS2" style = {{position:"absolute",right:"0px"}}>Send Request</button>
                         </Col>
                     </Row>
-                </form>
+                </Form>
             </div>
         </Container>
     )
 }
+
+export default AddBusRequest;
