@@ -39,7 +39,7 @@ function Credentials() {
 
     function handleSignUp(credentials) {
 
-        fetch("http://localhost:3001/operatorCredentials/signUp/",{
+        fetch("https://redbus-clone.herokuapp.com/signUp/",{
 
             "method": "POST",
             "headers" : {
@@ -62,7 +62,7 @@ function Credentials() {
     
     function handleSignIn(credentials) {
 
-        fetch("http://localhost:3001/operatorCredentials/signIn/",{
+        fetch("https://redbus-clone.herokuapp.com/signIn/",{
 
             "method": "POST",
             "headers" : {
